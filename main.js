@@ -55,7 +55,7 @@ function init() {
 
     // Posiziona la telecamera in modo decentrato per mostrare bene il pavimento e lo sfondo.
     // Si trova in alto, a destra e in avanti rispetto all'origine (0,0,0).
-    camera.position.set(10, 12, 25); // X, Y, Z
+    camera.position.set(4, 15, 25); // X, Y, Z
     camera.lookAt(0, 0, 0); // Fai in modo che la telecamera guardi verso l'origine.
 
 
