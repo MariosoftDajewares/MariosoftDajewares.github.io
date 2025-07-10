@@ -41,7 +41,7 @@ function init() {
     renderer.setClearColor(0xffffff);
     
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombre più morbide
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombre piÃ¹ morbide
 
     // Crea la scena.
     scene = new THREE.Scene();
@@ -55,20 +55,20 @@ function init() {
 
     // Posiziona la telecamera in modo decentrato per mostrare bene il pavimento e lo sfondo.
     // Si trova in alto, a destra e in avanti rispetto all'origine (0,0,0).
-    camera.position.set(10, 12, 15); // X, Y, Z
+    camera.position.set(10, 12, 25); // X, Y, Z
     camera.lookAt(0, 0, 0); // Fai in modo che la telecamera guardi verso l'origine.
 
 
     // --- Creazione del Pavimento Marrone ---
     // Geometria del pavimento: una scatola (BoxGeometry).
-    // Dimensioni: 4m (larghezza) x 0.25m (altezza) x 4m (profondità).
+    // Dimensioni: 4m (larghezza) x 0.25m (altezza) x 4m (profonditÃ ).
     const floorGeometry = new THREE.BoxGeometry(24, 0.5, 24);
 	const floorMaterial = new THREE.MeshStandardMaterial({
-        color: 0x5C4033, // Un marrone più scuro e ricco (es. Dark Sienna)
-        roughness: 0.8,  // Rende la superficie meno riflettente, più opaca
-        metalness: 0.15,  // Un tocco di metallicità per un leggero luccichio
+        color: 0x5C4033, // Un marrone piÃ¹ scuro e ricco (es. Dark Sienna)
+        roughness: 0.8,  // Rende la superficie meno riflettente, piÃ¹ opaca
+        metalness: 0.15,  // Un tocco di metallicitÃ  per un leggero luccichio
          //clearcoat: 0.5,    // Aggiunge un rivestimento trasparente (come una vernice lucida)
-         //clearcoatRoughness: 0.15 // La rugosità di questo rivestimento (meno rugoso = più lucido)
+         //clearcoatRoughness: 0.15 // La rugositÃ  di questo rivestimento (meno rugoso = piÃ¹ lucido)
     });
 
     // Crea la mesh del pavimento combinando geometria e materiale.
@@ -95,7 +95,7 @@ function init() {
     // Permette all'utente di ruotare, zoomare e spostare la telecamera con il mouse.
     
     controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // Abilita lo "smorzamento" per un movimento più fluido.
+    controls.enableDamping = true; // Abilita lo "smorzamento" per un movimento piÃ¹ fluido.
     controls.dampingFactor = 0.25; // Fattore di smorzamento.
 
     // --- Gestione del Ridimensionamento della Finestra ---
@@ -127,7 +127,7 @@ function animate() {
     // Questo crea un loop di animazione fluido.
     requestAnimationFrame(animate);
 
-    // Aggiorna i controlli della telecamera (necessario se 'enableDamping' è true).
+    // Aggiorna i controlli della telecamera (necessario se 'enableDamping' Ã¨ true).
     controls.update();
 
     // Renderizza la scena con la telecamera corrente.
