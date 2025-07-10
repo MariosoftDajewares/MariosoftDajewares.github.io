@@ -1,114 +1,123 @@
 body {
     margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #1a1a1a; /* Sfondo scuro */
+    color: #f0f0f0; /* Testo chiaro */
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #1a1a1a;
-    color: #ffffff;
-    font-family: 'Inter', sans-serif;
-    overflow: hidden;
+    min-height: 100vh; /* Assicura che il body occupi l'intera altezza della viewport */
+    overflow: hidden; /* Evita scroll indesiderati */
 }
 
 .container {
-    /* MODIFICATO: Ridotto la larghezza e la max-width per ridurre le dimensioni del canvas di circa un terzo */
-    width: 70%; /* Era 90% */
-    max-width: 1000px; /* Era 1200px */
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5px;
+    gap: 10px; /* Spazio tra gli elementi verticali */
+    padding: 15px;
+    padding-bottom: 30px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.7);
+    width: 98%; /* MODIFICATO: Larghezza massima del contenitore, aumentata */
+    max-width: 1380px; /* MODIFICATO: Limite per schermi grandi (1200 * 1.15) */
     box-sizing: border-box;
 }
 
 .main-title {
-    text-align: center;
-    margin-bottom: 5px;
-    margin-top: 5px;
-    font-size: 2em;
-    font-weight: 700;
-    color: #f0f0f0;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
-    letter-spacing: 1.5px;
+    color: #4CAF50; /* Verde brillante per il titolo */
+    margin-top: 4px; /* Modificato come richiesto */
+    margin-bottom: 5px; /* Mantenuto dal tuo CSS fornito */
+    font-size: 1.2em; /* Mantenuto dal tuo CSS fornito */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Mantenuto dal tuo CSS fornito */
+    text-align: center; /* Aggiunto per coerenza con il layout del titolo */
+    font-weight: 700; /* Mantenuto per un titolo in grassetto */
+    letter-spacing: 1.5px; /* Mantenuto per la spaziatura delle lettere */
+}
+
+
+.interactive-area {
+    display: flex;
+    flex-direction: row; /* Disposizione orizzontale */
+    align-items: center; /* Allinea verticalmente al centro */
+    justify-content: space-between; /* Spazia gli elementi */
+    width: 100%;
+    gap: 10px; /* Spazio tra gli elementi orizzontali */
 }
 
 .canvas-wrapper {
-    width: 100%;
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    background-color: #333;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
-    border: 2px solid #555;
-}
-
-#giostraCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.head-selection-buttons, .catapult-controls, .ragdoll-scale-controls {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-grow: 1; /* Il canvas occupa lo spazio disponibile */
+    max-width: 80%; /* MODIFICATO: Limita la larghezza del canvas (70% * 1.15 = 80.5% circa) */
+    border-radius: 10px;
+    overflow: hidden; /* Assicura che il canvas non esca dai bordi */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    aspect-ratio: 16 / 9; /* Mantiene un rapporto d'aspetto comune per il canvas */
+    display: flex; /* Per centrare il canvas se non occupa tutto lo spazio */
     justify-content: center;
     align-items: center;
 }
 
-.head-selection-buttons button, .catapult-controls button {
-    background-color: #4CAF50;
+#giostraCanvas {
+    width: 100%;
+    height: 100%;
+    display: block; /* Rimuove lo spazio extra sotto il canvas */
+}
+
+.game-controls,
+.ragdoll-scale-controls {
+    display: flex;
+    flex-direction: column; /* I controlli interni sono verticali */
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    min-width: 150px; /* Larghezza minima per i controlli */
+}
+
+button {
+    background-color: #4CAF50; /* Verde */
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 1.1em;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
     transition: background-color 0.3s ease, transform 0.1s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Occupa tutta la larghezza disponibile nel suo contenitore */
+    box-sizing: border-box;
 }
 
-/* Stile specifico per il pulsante catapulta */
-#launchCatapultBtn {
-    background-color: #FF5722;
-}
-#launchCatapultBtn:hover {
-    background-color: #e64a19;
-}
-#launchCatapultBtn:active {
-    background-color: #d84315;
-}
-
-.head-selection-buttons button:hover, .catapult-controls button:hover {
-    background-color: #45a049;
+button:hover {
+    background-color: #5cb85c;
     transform: translateY(-2px);
 }
 
-.head-selection-buttons button:active, .catapult-controls button:active {
+button:active {
     background-color: #3e8e41;
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Stile per lo slider */
+.ragdoll-scale-controls label {
+    font-size: 1em;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
 #ragdollScaleSlider {
-    width: 200px;
-    -webkit-appearance: none;
+    width: 100%;
+    -webkit-appearance: none; /* Rimuove lo stile predefinito del browser */
     appearance: none;
     height: 8px;
-    background: #d3d3d3;
+    background: #555;
     outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
     border-radius: 5px;
+    transition: background 0.2s;
+    margin-top: 5px;
 }
 
 #ragdollScaleSlider::-webkit-slider-thumb {
@@ -117,55 +126,64 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #007bff;
+    background: #4CAF50;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 #ragdollScaleSlider::-moz-range-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #007bff;
+    background: #4CAF50;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-/* Media Queries per la Responsivit� */
+#ragdollScaleValue {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #4CAF50;
+}
+
+/* Media Queries per la Responsività */
 @media (max-width: 768px) {
-    .main-title {
-        font-size: 2em;
-    }
     .container {
+        padding: 15px;
+        width: 100%;
+        border-radius: 0; /* Rimuove i bordi arrotondati su schermi piccoli */
+    }
+
+    .main-title {
+        font-size: 1em; /* Leggermente più piccolo per tablet */
+    }
+
+    .interactive-area {
+        flex-direction: column; /* Su schermi piccoli, i controlli tornano verticali */
+        gap: 15px;
+    }
+
+    .canvas-wrapper {
+        max-width: 100%; /* Il canvas occupa tutta la larghezza */
+        aspect-ratio: 4 / 3; /* Rapporto d'aspetto più adatto ai dispositivi mobili */
+    }
+
+    .game-controls,
+    .ragdoll-scale-controls {
+        width: 100%; /* I controlli occupano tutta la larghezza */
+        min-width: unset; /* Rimuove la larghezza minima */
         padding: 10px;
     }
-    .head-selection-buttons, .catapult-controls, .ragdoll-scale-controls {
-        gap: 8px;
-    }
-    .head-selection-buttons button, .catapult-controls button {
-        padding: 8px 15px;
-        font-size: 0.9em;
-    }
-    #ragdollScaleSlider {
-        width: 150px;
+
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
     }
 }
 
 @media (max-width: 480px) {
     .main-title {
-        font-size: 1.5em;
-    }
-    .container {
-        padding: 5px;
-    }
-    .head-selection-buttons, .catapult-controls, .ragdoll-scale-controls {
-        gap: 5px;
-    }
-    .head-selection-buttons button, .catapult-controls button {
-        padding: 6px 12px;
-        font-size: 0.8em;
-    }
-    #ragdollScaleSlider {
-        width: 120px;
+        font-size: 0.9em; /* Ancora più piccolo per mobile */
     }
 }
