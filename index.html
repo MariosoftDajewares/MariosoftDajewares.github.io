@@ -3,106 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mariosoft Sandbox</title>
-    <!-- Carica il font Inter da Google Fonts per un aspetto pulito -->
+    <title>Metapulta by Erpan Tera</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-   
+    
+    <link rel="stylesheet" href="style.css">
 
-
-    <!-- CSS incorporato per lo stile della pagina e del canvas -->
-    <style>
-        /* Stile generale del corpo della pagina */
-        body {
-            margin: 0; /* Rimuove i margini predefiniti del browser */
-            display: flex; /* Usa Flexbox per centrare il contenuto */
-            flex-direction: column; /* Organizza gli elementi in colonna */
-            justify-content: center; /* Centra verticalmente il contenuto */
-            align-items: center; /* Centra orizzontalmente il contenuto */
-            min-height: 100vh; /* Assicura che il corpo occupi l'intera altezza della viewport */
-            background-color: #1a1a1a; /* Colore di sfondo scuro */
-            color: #ffffff; /* Colore del testo bianco */
-            font-family: 'Inter', sans-serif; /* Imposta il font Inter */
-            overflow: hidden; /* Nasconde le scrollbar per un'esperienza a schermo intero */
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./lib/three.module.js",
+            "three/addons/": "./lib/"
         }
-
-        /* Contenitore principale per limitare la larghezza e centrare il blocco */
-        .container {
-            width: 90%; /* Larghezza del contenitore */
-            max-width: 1200px; /* Larghezza massima per schermi grandi */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px; /* Spazio interno */
-            box-sizing: border-box; /* Include padding nel calcolo della larghezza */
-        }
-
-        /* Stile del titolo principale */
-        .main-title {
-            text-align: center; /* Centra il testo */
-            margin-bottom: 5px; /* Spazio sotto il titolo */
-            margin-top: 5px; /* Spazio sopra il titolo */
-            font-size: 1.5em; /* Dimensione del font */
-            font-weight: 700; /* Grassetto */
-            color: #f0f0f0; /* Colore del titolo */
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Ombra per renderlo più leggibile */
-            letter-spacing: 1.8px; /* Spaziatura tra le lettere */
-        }
-
-        /* Wrapper per mantenere il rapporto di aspetto 16:9 del canvas */
-        .canvas-wrapper {
-            width: 100%; /* Occupa tutta la larghezza disponibile nel container */
-            position: relative; /* Necessario per posizionare il canvas all'interno */
-            padding-bottom: 56.25%; /* Questo crea il rapporto di aspetto 16:9 (9 / 16 = 0.5625) */
-            background-color: #333; /* Colore di sfondo di fallback per il wrapper */
-            border-radius: 10px; /* Bordi arrotondati */
-            overflow: hidden; /* Nasconde qualsiasi contenuto che esca dal wrapper */
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4); /* Ombra più pronunciata */
-            border: 2px solid #555; /* Bordo sottile */
-        }
-
-        /* Stile del canvas Three.js */
-        #giostraCanvas {
-            position: absolute; /* Posiziona il canvas all'interno del wrapper */
-            top: 0;
-            left: 0;
-            width: 100%; /* Occupa il 100% della larghezza del wrapper */
-            height: 100%; /* Occupa il 100% dell'altezza del wrapper */
-            display: block; /* Rimuove lo spazio extra sotto l'elemento inline */
-        }
-
-        /* Media Queries per la Responsività */
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 1.5em; /* Riduci la dimensione del titolo su schermi più piccoli */
-            }
-            .container {
-                padding: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-title {
-                font-size: 1.1em; /* Riduci ulteriormente la dimensione del titolo */
-            }
-            .container {
-                padding: 2px;
-            }
-        }
-    </style>
-	
-
-	
+    }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1 class="main-title">Three Magics by Erpan Tera</h1>
+        <h1 class="main-title">Metapulta by Erpan Tera</h1>
         <div class="canvas-wrapper">
             <canvas id="giostraCanvas"></canvas>
         </div>
+        <!-- Rimosso: div class="head-selection-buttons" -->
+        <!-- Controlli del gioco -->
+        <div class="game-controls">
+            <button id="respawnRagdollBtn">Respawn Ragdoll</button>
+        </div>
+        <!-- Controlli dello slider del ragdoll -->
+        <div class="ragdoll-scale-controls">
+            <label for="ragdollScaleSlider">Grandezza Ragdoll:</label>
+            <input type="range" id="ragdollScaleSlider" min="0.2" max="1.5" value="0.9" step="0.1">
+            <span id="ragdollScaleValue">0.9</span>
+        </div>
     </div>
 
-    <!-- Collegamento al tuo file JavaScript principale (main.js) -->
-    <!-- Il 'type="module"' è essenziale per usare le importazioni ES6 -->
+    <!-- Il tuo main.js come modulo ES6 -->
     <script type="module" src="main.js"></script>
 </body>
 </html>
