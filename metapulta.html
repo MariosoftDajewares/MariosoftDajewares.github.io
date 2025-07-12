@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariosoft Sandbox</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./lib/three.module.js",
+            "three/addons/": "./lib/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Mariosoft Sandbox</h1>
+        
+        <div class="interactive-area">
+            <!-- Pulsante Respawn a sinistra -->
+            <div class="left-game-controls">
+                <button id="respawnRagdollBtn">Riappoggia Cubo</button>
+            </div>
+            
+            <div class="canvas-wrapper">
+                <canvas id="giostraCanvas"></canvas>
+            </div>
+            
+            <!-- Pulsante Lancia Palettona a destra -->
+            <div class="right-game-controls">
+                <button id="launchPalettonaBtn">Lancia Palettona</button>
+            </div>
+        </div>
+        <!-- Rimosso: div class="ragdoll-scale-controls" -->
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
