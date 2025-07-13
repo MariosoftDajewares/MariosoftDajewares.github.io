@@ -10,31 +10,144 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a;
+            /* Sfondo con gradiente più scuro per simulare un cielo notturno profondo */
+            background: radial-gradient(ellipse at bottom, #0A0A10 0%, #000000 100%);
             color: #f0f0f0;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: column; /* Colonna per allineare gli elementi verticalmente */
+            justify-content: flex-start; /* Allinea gli elementi in alto */
             align-items: center;
             min-height: 100vh;
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
+            position: relative; /* Necessario per il posizionamento assoluto delle stelle */
+            overflow: hidden; /* Nasconde le stelle che escono dalla viewport */
         }
+
+        /* Contenitore per il campo stellare */
+        #starfield {
+            position: fixed; /* Fissa lo sfondo stellare rispetto alla viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Manda il campo stellare dietro il contenuto */
+            pointer-events: none; /* Rende il campo stellare non interattivo */
+        }
+
+        /* Strati di stelle con diverse dimensioni e velocità */
+        #starfield::before,
+        #starfield::after {
+            content: '';
+            position: absolute;
+            background: transparent;
+            border-radius: 50%; /* Rende le stelle rotonde */
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        /* Strato 1: Stelle piccole e veloci */
+        #starfield::before {
+            width: 1px;
+            height: 1px;
+            box-shadow:
+                /* Generazione di stelle più numerose e distribuite */
+                10vw 80vh #FFF, 15vw 15vh #FFF, 20vw 90vh #FFF, 25vw 50vh #FFF, 30vw 20vh #FFF, 35vw 75vh #FFF, 40vw 30vh #FFF, 45vw 85vh #FFF, 50vw 10vh #FFF, 55vw 60vh #FFF, 60vw 35vh #FFF, 65vw 95vh #FFF, 70vw 25vh #FFF, 75vw 70vh #FFF, 80vw 5vh #FFF, 85vw 40vh #FFF, 90vw 80vh #FFF, 95vw 15vh #FFF, 5vw 65vh #FFF, 12vw 30vh #FFF, 18vw 95vh #FFF, 22vw 40vh #FFF, 28vw 70vh #FFF, 32vw 10vh #FFF, 38vw 80vh #FFF, 42vw 25vh #FFF, 48vw 55vh #FFF, 52vw 90vh #FFF, 58vw 30vh #FFF, 62vw 75vh #FFF, 68vw 5vh #FFF, 72vw 45vh #FFF, 78vw 85vh #FFF, 82vw 20vh #FFF, 88vw 60vh #FFF, 92vw 35vh #FFF, 98vw 70vh #FFF, 3vw 10vh #FFF, 8vw 50vh #FFF, 13vw 85vh #FFF, 17vw 20vh #FFF, 23vw 60vh #FFF, 27vw 95vh #FFF, 33vw 40vh #FFF, 37vw 75vh #FFF, 43vw 15vh #FFF, 47vw 65vh #FFF, 53vw 30vh #FFF, 57vw 80vh #FFF, 63vw 25vh #FFF, 67vw 70vh #FFF, 73vw 5vh #FFF, 77vw 45vh #FFF, 83vw 85vh #FFF, 87vw 20vh #FFF, 93vw 60vh #FFF, 97vw 35vh #FFF, 2vw 70vh #FFF, 7vw 5vh #FFF, 12vw 45vh #FFF, 17vw 85vh #FFF, 22vw 20vh #FFF, 27vw 60vh #FFF, 32vw 95vh #FFF, 37vw 40vh #FFF, 42vw 75vh #FFF, 47vw 15vh #FFF, 52vw 65vh #FFF, 57vw 30vh #FFF, 62vw 80vh #FFF, 67vw 25vh #FFF, 72vw 70vh #FFF, 77vw 5vh #FFF, 82vw 45vh #FFF, 87vw 85vh #FFF, 92vw 20vh #FFF, 97vw 60vh #FFF, 4vw 95vh #FFF, 9vw 30vh #FFF, 14vw 75vh #FFF, 19vw 10vh #FFF, 24vw 50vh #FFF, 29vw 85vh #FFF, 34vw 20vh #FFF, 39vw 60vh #FFF, 44vw 95vh #FFF, 49vw 40vh #FFF, 54vw 75vh #FFF, 59vw 15vh #FFF, 64vw 65vh #FFF, 69vw 30vh #FFF, 74vw 80vh #FFF, 79vw 25vh #FFF, 84vw 70vh #FFF, 89vw 5vh #FFF, 94vw 45vh #FFF, 99vw 85vh #FFF,
+                1vw 1vh #FFF, 6vw 25vh #FFF, 11vw 50vh #FFF, 16vw 75vh #FFF, 21vw 99vh #FFF, 26vw 5vh #FFF, 31vw 30vh #FFF, 36vw 55vh #FFF, 41vw 80vh #FFF, 46vw 10vh #FFF, 51vw 35vh #FFF, 56vw 60vh #FFF, 61vw 85vh #FFF, 66vw 15vh #FFF, 71vw 40vh #FFF, 76vw 65vh #FFF, 81vw 90vh #FFF, 86vw 20vh #FFF, 91vw 45vh #FFF, 96vw 70vh #FFF, 99vw 95vh #FFF, 0vw 0vh #FFF, 2vw 20vh #FFF, 7vw 45vh #FFF, 12vw 70vh #FFF, 17vw 95vh #FFF, 22vw 0vh #FFF, 27vw 25vh #FFF, 32vw 50vh #FFF, 37vw 75vh #FFF, 42vw 99vh #FFF, 47vw 5vh #FFF, 52vw 30vh #FFF, 57vw 55vh #FFF, 62vw 80vh #FFF, 67vw 10vh #FFF, 72vw 35vh #FFF, 77vw 60vh #FFF, 82vw 85vh #FFF, 87vw 15vh #FFF, 92vw 40vh #FFF, 97vw 65vh #FFF, 99vw 90vh #FFF;
+            animation: moveStars 15s linear infinite; /* Animazione più veloce */
+        }
+
+        /* Strato 2: Stelle medie e più lente */
+        #starfield::after {
+            width: 2px;
+            height: 2px;
+            box-shadow:
+                /* Generazione di stelle più numerose e distribuite */
+                12vw 70vh #FFF, 18vw 25vh #FFF, 23vw 80vh #FFF, 28vw 40vh #FFF, 33vw 95vh #FFF, 38vw 15vh #FFF, 43vw 60vh #FFF, 48vw 35vh #FFF, 53vw 85vh #FFF, 58vw 20vh #FFF, 63vw 75vh #FFF, 68vw 50vh #FFF, 73vw 90vh #FFF, 78vw 30vh #FFF, 83vw 65vh #FFF, 88vw 5vh #FFF, 93vw 45vh #FFF, 98vw 80vh #FFF, 7vw 10vh #FFF, 14vw 55vh #FFF, 20vw 90vh #FFF, 26vw 35vh #FFF, 31vw 70vh #FFF, 36vw 5vh #FFF, 41vw 45vh #FFF, 46vw 85vh #FFF, 51vw 20vh #FFF, 56vw 60vh #FFF, 61vw 95vh #FFF, 66vw 40vh #FFF, 71vw 75vh #FFF, 76vw 15vh #FFF, 81vw 65vh #FFF, 86vw 30vh #FFF, 91vw 80vh #FFF, 96vw 25vh #FFF, 4vw 70vh #FFF, 9vw 5vh #FFF, 14vw 45vh #FFF, 19vw 85vh #FFF, 24vw 20vh #FFF, 29vw 60vh #FFF, 34vw 95vh #FFF, 39vw 40vh #FFF, 44vw 75vh #FFF, 49vw 15vh #FFF, 54vw 65vh #FFF, 59vw 30vh #FFF, 64vw 80vh #FFF, 69vw 25vh #FFF, 74vw 70vh #FFF, 79vw 5vh #FFF, 84vw 45vh #FFF, 89vw 85vh #FFF, 94vw 20vh #FFF, 99vw 60vh #FFF,
+                3vw 2vh #FFF, 8vw 27vh #FFF, 13vw 52vh #FFF, 18vw 77vh #FFF, 23vw 97vh #FFF, 28vw 7vh #FFF, 33vw 32vh #FFF, 38vw 57vh #FFF, 43vw 82vh #FFF, 48vw 12vh #FFF, 53vw 37vh #FFF, 58vw 62vh #FFF, 63vw 87vh #FFF, 68vw 17vh #FFF, 73vw 42vh #FFF, 78vw 67vh #FFF, 83vw 92vh #FFF, 88vw 22vh #FFF, 93vw 47vh #FFF, 98vw 72vh #FFF, 1vw 99vh #FFF, 4vw 4vh #FFF, 9vw 29vh #FFF, 14vw 54vh #FFF, 19vw 79vh #FFF, 24vw 99vh #FFF, 29vw 9vh #FFF, 34vw 34vh #FFF, 39vw 59vh #FFF, 44vw 84vh #FFF, 49vw 14vh #FFF, 54vw 39vh #FFF, 59vw 64vh #FFF, 64vw 89vh #FFF, 69vw 19vh #FFF, 74vw 44vh #FFF, 79vw 69vh #FFF, 84vw 94vh #FFF, 89vw 24vh #FFF, 94vw 49vh #FFF, 99vw 74vh #FFF;
+            animation: moveStars 25s linear infinite; /* Animazione più lenta, ma comunque più veloce di prima */
+        }
+
+        /* Keyframes per l'animazione delle stelle */
+        @keyframes moveStars {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100vh); } /* Le stelle si muovono verso l'alto */
+        }
+
         .container {
-            background-color: #2a2a2a;
+            /* Sfondo del container con immagine */
+            background-image: url('./txt/panel.png'); /* SOSTITUISCI CON IL TUO PERCORSO IMMAGINE */
+            background-size: cover; /* Copre l'intera area del container */
+            background-position: center; /* Centra l'immagine di sfondo */
+            background-repeat: no-repeat; /* Non ripetere l'immagine */
+            background-color: rgba(42, 42, 42, 0.5); /* Fallback colore e per trasparenza se immagine non copre */
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             padding: 30px;
             max-width: 600px;
             width: 90%;
+            z-index: 1; /* Assicura che il contenuto sia sopra le stelle */
+            position: relative; /* Necessario per z-index */
+            margin-top: 20px; /* Aggiungi un po' di spazio tra la scritta scorrevole e il container */
+            /* Effetto vetro smerigliato */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); /* Per compatibilità Safari */
+            transition: filter 0.3s ease; /* Transizione per il filtro luminosità */
         }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.2) 0%, rgba(0, 123, 255, 0) 70%); /* Gradiente radiale viola-blu */
+            opacity: 0; /* Inizialmente invisibile */
+            animation: glowPulse 4s infinite alternate; /* Animazione di pulsazione */
+            z-index: -1; /* Dietro il contenuto del container */
+            pointer-events: none; /* Non blocca gli eventi del mouse */
+        }
+
+        .container:hover {
+            filter: brightness(1.2); /* Aumenta la luminosità al passaggio del mouse */
+        }
+
+        /* Animazione per il bagliore del container */
+        @keyframes glowPulse {
+            0% { opacity: 0; transform: scale(0.95); }
+            50% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.95); }
+        }
+
         h1 {
-            color: #4CAF50;
+            /* Stile del titolo con gradiente animato blu-violetto */
+            background-image: linear-gradient(to right, #007bff, #6f42c4, #8a2be2, #6f42c4, #007bff); /* Gradiente da blu a violetto e ritorno */
+            background-size: 200% auto; /* Rende il gradiente più largo del testo per l'animazione */
+            -webkit-background-clip: text; /* Applica il gradiente solo al testo (per WebKit) */
+            background-clip: text; /* Applica il gradiente solo al testo */
+            -webkit-text-fill-color: transparent; /* Rende il colore del testo trasparente (per WebKit) */
+            color: transparent; /* Rende il colore del testo trasparente */
+            animation: gradientAnimation 5s linear infinite; /* Animazione del gradiente */
+
             margin-bottom: 20px;
             font-size: 2.8em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Ombra più pronunciata per leggibilità */
+            transition: text-shadow 0.3s ease; /* Transizione per l'ombra del testo */
         }
+
+        h1:hover {
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 25px rgba(0, 123, 255, 0.6); /* Ombra luminosa al passaggio del mouse */
+        }
+
+        /* Keyframes per l'animazione del gradiente del titolo */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
         ul {
             list-style: none;
             padding: 0;
@@ -45,41 +158,101 @@
         }
         a {
             display: inline-block;
-            background-color: #4CAF50;
+            background-color: #555; /* Grigio scuro per i pulsanti */
             color: white;
             padding: 12px 25px;
             border-radius: 8px;
             text-decoration: none;
             font-size: 1.2em;
-            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: bold; /* Font più spesso */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, letter-spacing 0.3s ease; /* Transizione più fluida per tutti gli effetti */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0; /* Valore iniziale */
         }
         a:hover {
-            background-color: #5cb85c;
-            transform: translateY(-2px);
+            background-color: #777; /* Grigio più chiaro all'hover */
+            transform: translateY(-3px) scale(1.02); /* Sollevamento più accentuato e leggero ingrandimento */
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7), 0 0 25px rgba(138, 43, 226, 0.5); /* Bagliore blu-violetto */
+            letter-spacing: 0.05em; /* Aumento dello spazio tra le lettere */
         }
         a:active {
-            background-color: #3e8e41;
+            background-color: #444; /* Grigio ancora più scuro al click */
             transform: translateY(0);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
         }
         p {
             margin-top: 30px;
             font-size: 0.9em;
             color: #aaa;
+            text-shadow: -2px -2px 4px rgba(0, 0, 0, 0.5); /* Ombra proiettata verso top-right */
+        }
+
+        /* Stili per la scritta scorrevole */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden; /* Nasconde il testo che esce dal contenitore */
+            margin-bottom: 20px; /* Aggiungi un po' di spazio tra la scritta scorrevole e il container */
+            padding: 5px 0; /* Meno padding */
+            background-color: rgba(0, 0, 0, 0.3); /* Sfondo leggermente trasparente */
+            border-radius: 8px;
+            box-shadow: none; /* Rimosso l'ombra */
+            white-space: nowrap; /* Mantiene il testo su una singola riga */
+            box-sizing: border-box; /* Include padding e border nella larghezza totale */
+            position: relative;
+            z-index: 2; /* Assicura che sia sopra il container */
+            /* Effetto vetro smerigliato */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); /* Per compatibilità Safari */
+        }
+
+        .marquee-text {
+            display: inline-block;
+            font-size: 1.6em; /* Font più grande */
+            font-weight: bold;
+            padding-left: 100%; /* Fa iniziare il testo fuori dallo schermo a destra */
+            animation: marquee 90s linear infinite, colorChangeText 10s linear infinite; /* Animazione di scorrimento più lenta e cambio colore più lento */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+
+        /* Keyframes per l'animazione di scorrimento del testo */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); } /* Scorre il testo a sinistra */
+        }
+
+        /* Keyframes per l'animazione di cambio colore del testo */
+        @keyframes colorChangeText {
+            0% { color: #FF0000; } /* Rosso */
+            14% { color: #FFA500; } /* Arancione */
+            28% { color: #FFFF00; } /* Giallo */
+            42% { color: #00FF00; } /* Verde */
+            56% { color: #00FFFF; } /* Ciano */
+            70% { color: #0000FF; } /* Blu */
+            84% { color: #8A2BE2; } /* Blu violetto */
+            100% { color: #FF0000; } /* Torna al Rosso */
         }
     </style>
 </head>
 <body>
+    <div id="starfield"></div> <!-- Contenitore per l'animazione delle stelle -->
+
+    <div class="marquee-container">
+        <p class="marquee-text">BENVENUTI SU ERPANTERA.GITHUB.IO - QUESTO SITO SI OSTINA AD EVOLVERSI. NON RIFATELO A CASA. ALLE PRIMME 50 TELEFONATE IN OMAGGIO UN MODELLO 3D DI UNA SFERA.PER L'ANIMAZIONE C'E' UN SOVRAPPREZZO. GRAFICHE FRESCHE DI GIORNATA ANCHE FUORI STAGIONE. L' A.I. NON VUOLE MA QUI ANCORA FACCIAMO LA ROBA A MANO, MI RACCOMANDO NESSUNO GLIELO VADA A DIRE. ESPLORATE PURE, FATE COME FOSTE A CASA VOSTRA. COME SE IO VENGO A CASA TUA E MI METTO AD APRIRE TUTTE LE PORTE, BEL TIPO QUESTO QUA. SE LE STELLE VI DANNO FASTIDIO SPOSTATELE CON LA MANO TANTO NON VI FANNO NIENTE. </p>
+    </div>
+
     <div class="container">
-        <h1>Mariosoft Sandbox</h1>
+        <h1>Erpan Tera</h1>
         <p>Choose your destiny</p>
         <ul>
-            <li><a href="metapulta.html">Metapulta</a></li>
+		
+            <!-- <li><a href="Lab.html">Lab</a></li> -->
+            <li><a href="metapulta.html">Metapulta (rotto)</a></li>
+            <li><a href="lab_2.html">Laboratorio</a></li>
             <!-- Aggiungi qui altri link alle tue pagine future -->
-            <!-- <li><a href="metapulta.html">Metapulta</a></li> -->
+	    
+	    
         </ul>
-        <p>Powered by Erpan Tera</p>
+        <p>Powered by Mariosoft</p>
     </div>
 </body>
 </html>
