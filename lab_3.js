@@ -1,6 +1,6 @@
 // main.js
-// Questa scena è configurata per la visualizzazione di modelli complessi,
-// con attenzione all'illuminazione, alle ombre e al rendering di qualità.
+// Questa scena Ã¨ configurata per la visualizzazione di modelli complessi,
+// con attenzione all'illuminazione, alle ombre e al rendering di qualitÃ .
 
 // --- 1. Inclusione dei Moduli Base ---
 import * as THREE from './lib/three.module.js';
@@ -15,7 +15,7 @@ let camera;
 let renderer;
 let controls;
 
-let floorGLB; // Variabile per tenere traccia del modello GLB usato come pavimento
+let floorMesh; // Variabile per tenere traccia della mesh del pavimento (ora una box)
 let loadedModel; // Variabile per tenere traccia del modello GLB caricato
 
 
@@ -31,9 +31,9 @@ function init() {
 
     // Abilita le ombre sul renderer
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombre più morbide
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombre piÃ¹ morbide
 
-    // Impostazioni di Tone Mapping e Encoding per una migliore resa dei colori e luminosità
+    // Impostazioni di Tone Mapping e Encoding per una migliore resa dei colori e luminositÃ 
     renderer.toneMapping = THREE.ACESFilmicToneMapping; // Tone mapping cinematografico
     renderer.toneMappingExposure = 1.25; // Regola l'esposizione
     renderer.outputEncoding = THREE.sRGBEncoding; // Corretta gestione dello spazio colore
@@ -48,7 +48,7 @@ function init() {
 
     // --- Controlli della Telecamera (OrbitControls) ---
     controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // Abilita lo smorzamento per un movimento più fluido
+    controls.enableDamping = true; // Abilita lo smorzamento per un movimento piÃ¹ fluido
     controls.dampingFactor = 0.05; // Fattore di smorzamento
     controls.maxPolarAngle = Math.PI / 2 - 0.05; // Limita l'angolo polare per non andare sotto il pavimento
     controls.minDistance = 0; // Distanza minima di zoom
@@ -56,14 +56,14 @@ function init() {
     controls.target.y = 2.0; // Mantenuto il target Y del tuo codice
     controls.update(); // Aggiorna i controlli dopo aver modificato il target
 
-    // --- Caricamento del Pavimento come Modello GLB ---
-    loadGLBAsFloor('./models/floor.glb'); // Carica il tuo modello GLB per il pavimento
+    // --- Creazione del Pavimento come Box ---
+    createFloorBox(); // Chiama la nuova funzione per creare il pavimento
 
 
     // --- Luci: Direzionali e Spot (senza AmbientLight o HemisphereLight) ---
 
     // Luce Direzionale (simula il sole)
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4); // Colore bianco, intensità 0.4 (dal tuo codice)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4); // Colore bianco, intensitÃ  0.4 (dal tuo codice)
     directionalLight.position.set(10, 15, 10); // Posizione della luce
     directionalLight.target.position.set(0, 0, 0); // La luce punta al centro della scena
     scene.add(directionalLight);
@@ -76,7 +76,6 @@ function init() {
     directionalLight.shadow.mapSize.height = 2048;
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 50;
-    // --- MODIFICA QUI: Aumenta l'area delle ombre per il pavimento più grande ---
     directionalLight.shadow.camera.left = -45; // Estendi l'area delle ombre
     directionalLight.shadow.camera.right = 45;
     directionalLight.shadow.camera.top = 45;
@@ -85,12 +84,12 @@ function init() {
     directionalLight.shadow.normalBias = 0.05; // Combatte il Peter Panning
 
     // Luce Spot (simula un faro)
-    const spotLight = new THREE.SpotLight(0xff3500, 0.8); // Colore arancione, intensità 0.8 (dal tuo codice)
+    const spotLight = new THREE.SpotLight(0xff3500, 0.8); // Colore arancione, intensitÃ  0.8 (dal tuo codice)
     spotLight.position.set(-8, 10, -8); // Posizione della luce spot
     spotLight.target.position.set(0, 0, 0); // La luce spot punta al centro
     spotLight.angle = Math.PI / 6; // Angolo del cono di luce
     spotLight.penumbra = 0.1; // Sfocatura dei bordi del cono di luce
-    spotLight.decay = 2; // Decadimento dell'intensità con la distanza
+    spotLight.decay = 2; // Decadimento dell'intensitÃ  con la distanza
     spotLight.distance = 50; // Distanza massima della luce
     scene.add(spotLight);
     scene.add(spotLight.target);
@@ -129,35 +128,21 @@ function init() {
     animate();
 }
 
-// --- Funzione per Caricare un Modello GLB come Pavimento ---
-async function loadGLBAsFloor(floorModelPath) {
-    const loader = new GLTFLoader();
+// --- Funzione per Creare una Box come Pavimento ---
+function createFloorBox() {
+    // Dimensioni della box: larghezza, altezza (spessore), profonditÃ 
+    // Ho scelto 90x0.1x90 per simulare un pavimento molto ampio e sottile,
+    // che corrisponde circa a un cubo di scala 30x0.03x30 con una scala di 3.0
+    const geometry = new THREE.BoxGeometry(90, 0.1, 90);
+    const whiteMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff }); // Materiale bianco
 
-    try {
-        const gltf = await loader.loadAsync(floorModelPath);
-        floorGLB = gltf.scene; // Assegna il modello del pavimento alla variabile globale
+    floorMesh = new THREE.Mesh(geometry, whiteMaterial);
+    floorMesh.position.set(0, -5, 0); // Posiziona la box come il pavimento
+    floorMesh.receiveShadow = true; // La box riceve le ombre
+    floorMesh.castShadow = false; // La box non proietta ombre significative
 
-        floorGLB.position.set(0, -5, 0); // Mantieni la posizione a 0,0,0
-        // --- MODIFICA QUI: Aumenta la scala del pavimento ---
-        floorGLB.scale.set(3.0, 3.0, 3.0); // Scala molto più grande per un pavimento più ampio
-        
-        // Assegna un materiale MeshStandardMaterial bianco a tutte le mesh del pavimento
-        const whiteMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff }); // Materiale bianco
-        floorGLB.traverse((child) => {
-            if (child.isMesh) {
-                child.material = whiteMaterial; // Assegna il nuovo materiale
-                child.receiveShadow = true;
-                child.castShadow = false; // Il pavimento solitamente non proietta ombre significative su altri oggetti
-                child.material.needsUpdate = true;
-            }
-        });
-    
-        scene.add(floorGLB);
-        console.log('Modello GLB usato come pavimento caricato con successo:', floorModelPath);
-
-    } catch (error) {
-        console.error('Errore durante il caricamento del modello GLB del pavimento:', error);
-    }
+    scene.add(floorMesh);
+    console.log('Pavimento creato come box con successo.');
 }
 
 
@@ -171,14 +156,14 @@ async function loadDEVOModel(modelPath, scaleFactor = 1.0) {
 
         // Imposta la scala del modello
         loadedModel.scale.set(6, 6, 6);
-        // --- MODIFICA QUI: Posiziona il modello più a sinistra (-X) e più in alto (+Y) ---
+        // --- MODIFICA QUI: Posiziona il modello piÃ¹ a sinistra (-X) e piÃ¹ in alto (+Y) ---
         loadedModel.position.set(-2, 1.5, 0); // Esempio: -2 sull'asse X (sinistra), 1.5 sull'asse Y (in alto)
 
         // Materiale nero opaco
         const matteBlackMaterial = new THREE.MeshStandardMaterial({
             color: 0x000000, // Nero
-            roughness: 0.8,  // Elevata rugosità per un aspetto opaco
-            metalness: 0.1   // Bassa metallicità per un aspetto non metallico
+            roughness: 0.8,  // Elevata rugositÃ  per un aspetto opaco
+            metalness: 0.1   // Bassa metallicitÃ  per un aspetto non metallico
         });
 
         // Assicurati che il modello proietti e riceva ombre e applica il nuovo materiale
