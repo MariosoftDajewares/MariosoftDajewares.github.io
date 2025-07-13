@@ -1,0 +1,187 @@
+/* Stile generale del corpo della pagina */
+html, body {
+    width: 100%; /* Assicura che occupi tutta la larghezza */
+    height: 100%; /* Assicura che occupi tutta l'altezza */
+    margin: 0;
+    padding: 0; /* Rimuovi padding predefinito */
+    overflow: hidden; /* Nasconde le scrollbar per un'esperienza a schermo intero */
+    font-family: 'Inter', sans-serif;
+    background-color: #1a1a1a; /* Sfondo scuro */
+    color: #f0f0f0; /* Testo chiaro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Assicura che il body occupi l'intera altezza della viewport */
+}
+
+/* Contenitore principale per limitare la larghezza e centrare il blocco */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Spazio tra gli elementi verticali */
+    padding: 8px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.7);
+    width: 98%; /* Larghezza quasi piena */
+   /* max-width: 1380px; /* Limite per schermi grandi */ */
+    box-sizing: border-box;
+    height: 100%; /* Permette al container di espandersi in altezza */
+}
+
+/* Stile del titolo principale */
+.main-title {
+    text-align: center; /* Centra il testo */
+    margin-top: 4px;
+    margin-bottom: 5px;
+    font-size: 1.8em;
+    font-weight: 700; /* Grassetto */
+    color: #5ecf5e; /* Colore del titolo */
+    text-shadow: 4px 4px 2px rgba(0, 0, 0, 0.9); /* Ombra per renderlo più leggibile */
+    letter-spacing: 1px; /* Spaziatura tra le lettere */
+}
+
+/* Contenitore per l'area interattiva (canvas + controlli) */
+.interactive-area {
+    display: flex; /* Usa flexbox per disporre gli elementi orizzontalmente */
+    flex-direction: row; /* Elementi in riga */
+    /*flex-wrap: nowrap; /* IMPEDISCE AI CONTROLLI DI ANDARE A CAPO */
+    align-items: center; /* Allinea gli elementi verticalmente al centro */
+    /*justify-content: center; /* Spazia gli elementi ai lati del canvas */
+    width: 100%;
+    gap: 10px; /* Spazio tra gli elementi orizzontali */
+    overflow-x: auto; /* Consente lo scorrimento orizzontale se il contenuto supera la larghezza */
+    -webkit-overflow-scrolling: touch; /* Migliora lo scrolling su iOS */
+    padding-bottom: 10px; /* Spazio per la scrollbar se compare */
+}
+
+/* Wrapper per mantenere il rapporto di aspetto 16:9 del canvas */
+.canvas-wrapper {
+    flex-grow: 1; /* Il canvas occupa lo spazio disponibile */
+    max-width: 100%; /* Limita la larghezza del canvas per fare spazio ai controlli */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 12px 25px rgba(80, 0, 0, 0.9); /* Ombra più pronunciata */
+    aspect-ratio: 16 / 9; /* Mantiene un rapporto d'aspetto comune per il canvas */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Impedisce al canvas di restringersi troppo */
+    min-width: 300px; /* Larghezza minima per il canvas per evitare che diventi troppo piccolo */
+    border: 3px solid #550000; /* Bordo sottile */
+    background-color: #333; /* Colore di sfondo di fallback per il wrapper */
+}
+
+#giostraCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Stili per i contenitori dei pulsanti laterali */
+.left-game-controls,
+.right-game-controls {
+    display: flex;
+    flex-direction: column; /* I pulsanti interni sono verticali */
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    min-width: 150px; /* Larghezza minima per i controlli */
+    flex-shrink: 0; /* Impedisce ai controlli di restringersi */
+}
+
+button {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Occupa tutta la larghezza disponibile nel suo contenitore */
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #5cb85c;
+    transform: translateY(-2px);
+}
+
+button:active {
+    background-color: #3e8e41;
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Rimosso: Stili per lo slider e il suo valore */
+
+/* Media Queries per la Responsività */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        width: 100%;
+        border-radius: 0; /* Rimuove i bordi arrotondati su schermi piccoli */
+    }
+
+    .main-title {
+        font-size: 1em; /* Leggermente più piccolo per tablet */
+    }
+
+    .interactive-area {
+        /* Mantiene il layout orizzontale, ma permette agli elementi di restringersi di più */
+       /* align-items: flex-start;
+        gap: 8px; /* Riduci il gap su schermi piccoli */
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .canvas-wrapper {
+        flex-grow: 2; /* Il canvas occupa più spazio */
+        flex-shrink: 1; /* Permette al canvas di restringersi */
+        min-width: 0; /* Rimuovi la larghezza minima fissa */
+        max-width: none; /* Rimuovi la larghezza massima per permettere flex-grow */
+        aspect-ratio: 16 / 9; /* Mantiene un rapporto d'aspetto orizzontale */
+    }
+
+    .left-game-controls,
+    .right-game-controls {
+        flex-grow: 1; /* I controlli occupano meno spazio */
+        flex-shrink: 1; /* Permette ai controlli di restringersi */
+        min-width: 0; /* Rimuovi la larghezza minima fissa */
+        width: auto;
+        padding: 8px;
+        gap: 10px;
+    }
+
+    button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}
+
+/* Per schermi molto piccoli, ulteriori aggiustamenti */
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 0.9em; /* Ancora più piccolo per mobile */
+    }
+    .canvas-wrapper {
+        flex-grow: 2;
+        flex-shrink: 1;
+        min-width: 0;
+        max-width: none;
+    }
+    .left-game-controls,
+    .right-game-controls {
+        flex-grow: 1;
+        flex-shrink: 1;
+        min-width: 0;
+        padding: 5px;
+        gap: 8px;
+    }
+}
