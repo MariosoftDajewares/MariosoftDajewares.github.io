@@ -25,7 +25,9 @@ function init() {
 
     // --- Renderer ---
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    // Utilizza offsetWidth e offsetHeight per ottenere le dimensioni renderizzate dal CSS
+    // Questo assicura che il renderer si adatti alle dimensioni effettive del canvas nel DOM
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
     renderer.setPixelRatio(window.devicePixelRatio); // Rende la scena nitida su schermi HiDPI
     renderer.setClearColor(0x000000); // Sfondo nero
 
@@ -42,7 +44,8 @@ function init() {
     scene = new THREE.Scene();
 
     // --- Camera ---
-    camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    // Utilizza offsetWidth e offsetHeight per calcolare l'aspect ratio corretto
+    camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
     camera.position.set(5, 5, 5); // Posizione iniziale della telecamera
     camera.lookAt(0, 0, 0); // La telecamera inizialmente guarda il centro della scena
 
@@ -116,37 +119,26 @@ function init() {
         scene.background = new THREE.Color(0x444488);
     });
 
-
-    // --- Caricamento del Modello GLB Principale (DEVO.glb) ---
     loadDEVOModel('./models/DEVO.glb', 2.0); // Carica il modello DEVO.glb con un fattore di scala
 
-
-    // --- Gestione del Ridimensionamento della Finestra ---
     window.addEventListener('resize', onWindowResize, false);
 
     // Avvia il loop di animazione
     animate();
 }
-
 // --- Funzione per Creare una Box come Pavimento ---
 function createFloorBox() {
-    // Dimensioni della box: larghezza, altezza (spessore), profondità
-    // Ho scelto 90x0.1x90 per simulare un pavimento molto ampio e sottile,
-    // che corrisponde circa a un cubo di scala 30x0.03x30 con una scala di 3.0
     const geometry = new THREE.BoxGeometry(90, 0.1, 90);
     const whiteMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff }); // Materiale bianco
 
     floorMesh = new THREE.Mesh(geometry, whiteMaterial);
-    floorMesh.position.set(0, -5, 0); // Posiziona la box come il pavimento
-    floorMesh.receiveShadow = true; // La box riceve le ombre
-    floorMesh.castShadow = false; // La box non proietta ombre significative
-
+    floorMesh.position.set(0, -5, 0);  // Posizione identica al precedente pavimento GLB
+    floorMesh.receiveShadow = true;
+    floorMesh.castShadow = false;
     scene.add(floorMesh);
     console.log('Pavimento creato come box con successo.');
 }
 
-
-// --- Funzione per Caricare il Modello DEVO.glb e applicare materiale opaco ---
 async function loadDEVOModel(modelPath, scaleFactor = 1.0) {
     const loader = new GLTFLoader();
 
@@ -163,7 +155,7 @@ async function loadDEVOModel(modelPath, scaleFactor = 1.0) {
         const matteBlackMaterial = new THREE.MeshStandardMaterial({
             color: 0x000000, // Nero
             roughness: 0.8,  // Elevata rugosità per un aspetto opaco
-            metalness: 0.1   // Bassa metallicità per un aspetto non metallico
+            metalness: 0.1    // Bassa metallicità per un aspetto non metallico
         });
 
         // Assicurati che il modello proietti e riceva ombre e applica il nuovo materiale
@@ -205,23 +197,19 @@ async function loadDEVOModel(modelPath, scaleFactor = 1.0) {
 // --- 4. Funzione per il Ridimensionamento della Finestra ---
 function onWindowResize() {
     const canvas = document.getElementById('giostraCanvas');
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    // Utilizza offsetWidth e offsetHeight per ottenere le dimensioni renderizzate dal CSS
+    camera.aspect = canvas.offsetWidth / canvas.offsetHeight; // Usa offsetWidth/Height
     camera.updateProjectionMatrix();
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight); // Usa offsetWidth/Height
 }
 
-
-// --- 5. Funzione di Animazione (animate) ---
 function animate() {
     requestAnimationFrame(animate);
 
-    // Aggiorna i controlli della telecamera
     controls.update();
 
-    // Esegui il rendering della scena
     renderer.render(scene, camera);
 }
 
-
-// --- 6. Avvio dell'Applicazione ---
-init();
+// Chiamata a init() solo dopo che il DOM è completamente caricato
+window.onload = init;
