@@ -205,6 +205,7 @@ button:active {
 
     .main-title {
         font-size: 2.2em; /* Leggermente più piccolo per tablet/mobile */
+        margin-top: 1em;
     }
     
     .canvas-area-with-overlay {
