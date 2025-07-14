@@ -7,7 +7,6 @@ import * as THREE from './lib/three.module.js';
 import { OrbitControls } from './lib/OrbitControls.js';
 import { GLTFLoader } from './lib/GLTFLoader.js';
 import { RGBELoader } from './lib/RGBELoader.js';
-// Rimosso: import { TextureLoader } from './lib/TextureLoader.js'; // Non più necessario per il pavimento GLB
 
 
 // --- 2. Dichiarazione delle Variabili Globali della Scena ---
@@ -16,7 +15,7 @@ let camera;
 let renderer;
 let controls;
 
-let floorGLB; // Variabile per tenere traccia del modello GLB usato come pavimento
+// Rimosso: let floorGLB; // Non più necessario, il pavimento è una geometria generata
 let loadedModel; // Variabile per tenere traccia del modello GLB caricato
 
 
@@ -60,8 +59,13 @@ function init() {
     controls.target.y = 2.0; // Mantenuto il target Y del tuo codice
     controls.update(); // Aggiorna i controlli dopo aver modificato il target
 
-    // --- Caricamento del Pavimento come Modello GLB ---
-    loadGLBAsFloor('./models/floor.glb'); // Carica il tuo modello GLB per il pavimento
+    // --- Creazione del Pavimento come BoxGeometry Bianca ---
+    const floorGeometry = new THREE.BoxGeometry(30, 0.1, 30); // Larghezza, Altezza (sottile), Profondità
+    const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff }); // Materiale bianco
+    const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+    floorMesh.position.set(0, -0.3, 0); // Posizione identica al precedente pavimento GLB
+    floorMesh.receiveShadow = true; // Il pavimento riceve le ombre
+    scene.add(floorMesh);
 
 
     // --- Luci: Direzionali e Spot (senza AmbientLight o HemisphereLight) ---
@@ -130,39 +134,8 @@ function init() {
     // Avvia il loop di animazione
     animate();
 }
-// --- Funzione per Caricare un Modello GLB come Pavimento ---
-async function loadGLBAsFloor(floorModelPath) {
-    const loader = new GLTFLoader();
-    try {
-        const gltf = await loader.loadAsync(floorModelPath);
-        floorGLB = gltf.scene; // Assegna il modello del pavimento alla variabile globale
-        // Posiziona il pavimento. Potrebbe essere necessario aggiustare questi valori
-        // a seconda di come il tuo modello GLB è stato esportato da Blender.
-        // Se è un piano orizzontale centrato all'origine, queste impostazioni dovrebbero andare bene.
-        floorGLB.position.set(0, -0.3, 0); // Mantieni la posizione a 0,0,0
-        floorGLB.scale.set(0.3,0.3,0.3);
-        // Se il tuo modello è stato esportato con l'asse Z come "up", potresti doverlo ruotare
-        // floorGLB.rotation.x = -Math.PI / 2; // Ruota di -90 gradi sull'asse X per renderlo orizzontale
 
-        // Assicurati che tutte le mesh all'interno del modello del pavimento ricevano ombre
-        floorGLB.traverse((child) => {
-            if (child.isMesh) {
-                child.receiveShadow = true;
-                // Se vuoi che il pavimento proietti ombre su altri oggetti (es. se ha delle sporgenze)
-                // child.castShadow = true;
-                if (child.material.isMeshStandardMaterial || child.material.isMeshPhysicalMaterial) {
-                    child.material.needsUpdate = true;
-                }
-            }
-        });
-    
-        scene.add(floorGLB);
-        console.log('Modello GLB usato come pavimento caricato con successo:', floorModelPath);
-
-    } catch (error) {
-        console.error('Errore durante il caricamento del modello GLB del pavimento:', error);
-    }
-}
+// Rimosso: Funzione loadGLBAsFloor non più necessaria
 
 
 // --- Funzione per Caricare un Modello GLB Principale ---
@@ -194,6 +167,7 @@ async function loadGLBModel(modelPath, scaleFactor = 1.0) {
 
         // Opzionale: Centra la telecamera sul modello caricato
         const box = new THREE.Box3().setFromObject(loadedModel);
+	
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
 
