@@ -1,13 +1,13 @@
 // main.js
-// Questa scena Ë configurata per la visualizzazione di modelli complessi,
-// con attenzione all'illuminazione, alle ombre e al rendering di qualit‡.
+// Questa scena √® configurata per la visualizzazione di modelli complessi,
+// con attenzione all'illuminazione, alle ombre e al rendering di qualit√†.
 
 // --- 1. Inclusione dei Moduli Base ---
 import * as THREE from './lib/three.module.js';
 import { OrbitControls } from './lib/OrbitControls.js';
 import { GLTFLoader } from './lib/GLTFLoader.js';
 import { RGBELoader } from './lib/RGBELoader.js';
-// Rimosso: import { TextureLoader } from './lib/TextureLoader.js'; // Non pi˘ necessario per il pavimento GLB
+// Rimosso: import { TextureLoader } from './lib/TextureLoader.js'; // Non pi√π necessario per il pavimento GLB
 
 
 // --- 2. Dichiarazione delle Variabili Globali della Scena ---
@@ -26,15 +26,17 @@ function init() {
 
     // --- Renderer ---
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    // Utilizza offsetWidth e offsetHeight per ottenere le dimensioni renderizzate dal CSS
+    // Questo assicura che il renderer si adatti alle dimensioni effettive del canvas nel DOM
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
     renderer.setPixelRatio(window.devicePixelRatio); // Rende la scena nitida su schermi HiDPI
     renderer.setClearColor(0x000000); // Sfondo nero
 
     // Abilita le ombre sul renderer
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombre pi˘ morbide
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombre pi√π morbide
 
-    // Impostazioni di Tone Mapping e Encoding per una migliore resa dei colori e luminosit‡
+    // Impostazioni di Tone Mapping e Encoding per una migliore resa dei colori e luminosit√†
     renderer.toneMapping = THREE.ACESFilmicToneMapping; // Tone mapping cinematografico
     renderer.toneMappingExposure = 1.25; // Regola l'esposizione
     renderer.outputEncoding = THREE.sRGBEncoding; // Corretta gestione dello spazio colore
@@ -43,13 +45,14 @@ function init() {
     scene = new THREE.Scene();
 
     // --- Camera ---
-    camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    // Utilizza offsetWidth e offsetHeight per calcolare l'aspect ratio corretto
+    camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
     camera.position.set(5, 5, 5); // Posizione iniziale della telecamera
     camera.lookAt(0, 0, 0); // La telecamera inizialmente guarda il centro della scena
 
     // --- Controlli della Telecamera (OrbitControls) ---
     controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // Abilita lo smorzamento per un movimento pi˘ fluido
+    controls.enableDamping = true; // Abilita lo smorzamento per un movimento pi√π fluido
     controls.dampingFactor = 0.05; // Fattore di smorzamento
     controls.maxPolarAngle = Math.PI / 2 - 0.05; // Limita l'angolo polare per non andare sotto il pavimento
     controls.minDistance = 0; // Distanza minima di zoom
@@ -64,7 +67,7 @@ function init() {
     // --- Luci: Direzionali e Spot (senza AmbientLight o HemisphereLight) ---
 
     // Luce Direzionale (simula il sole)
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4); // Colore bianco, intensit‡ 0.4 (dal tuo codice)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4); // Colore bianco, intensit√† 0.4 (dal tuo codice)
     directionalLight.position.set(10, 15, 10); // Posizione della luce
     directionalLight.target.position.set(0, 0, 0); // La luce punta al centro della scena
     scene.add(directionalLight);
@@ -85,12 +88,12 @@ function init() {
     directionalLight.shadow.normalBias = 0.05; // Combatte il Peter Panning
 
     // Luce Spot (simula un faro)
-    const spotLight = new THREE.SpotLight(0xff3500, 0.8); // Colore arancione, intensit‡ 0.8 (dal tuo codice)
+    const spotLight = new THREE.SpotLight(0xff3500, 0.8); // Colore arancione, intensit√† 0.8 (dal tuo codice)
     spotLight.position.set(-8, 10, -8); // Posizione della luce spot
     spotLight.target.position.set(0, 0, 0); // La luce spot punta al centro
     spotLight.angle = Math.PI / 6; // Angolo del cono di luce
     spotLight.penumbra = 0.1; // Sfocatura dei bordi del cono di luce
-    spotLight.decay = 2; // Decadimento dell'intensit‡ con la distanza
+    spotLight.decay = 2; // Decadimento dell'intensit√† con la distanza
     spotLight.distance = 50; // Distanza massima della luce
     scene.add(spotLight);
     scene.add(spotLight.target);
@@ -124,25 +127,21 @@ function init() {
 
     // --- Gestione del Ridimensionamento della Finestra ---
     window.addEventListener('resize', onWindowResize, false);
-
     // Avvia il loop di animazione
     animate();
 }
-
 // --- Funzione per Caricare un Modello GLB come Pavimento ---
 async function loadGLBAsFloor(floorModelPath) {
     const loader = new GLTFLoader();
-
     try {
         const gltf = await loader.loadAsync(floorModelPath);
         floorGLB = gltf.scene; // Assegna il modello del pavimento alla variabile globale
-
         // Posiziona il pavimento. Potrebbe essere necessario aggiustare questi valori
-        // a seconda di come il tuo modello GLB Ë stato esportato da Blender.
-        // Se Ë un piano orizzontale centrato all'origine, queste impostazioni dovrebbero andare bene.
+        // a seconda di come il tuo modello GLB √® stato esportato da Blender.
+        // Se √® un piano orizzontale centrato all'origine, queste impostazioni dovrebbero andare bene.
         floorGLB.position.set(0, -0.3, 0); // Mantieni la posizione a 0,0,0
         floorGLB.scale.set(0.3,0.3,0.3);
-	    // Se il tuo modello Ë stato esportato con l'asse Z come "up", potresti doverlo ruotare
+        // Se il tuo modello √® stato esportato con l'asse Z come "up", potresti doverlo ruotare
         // floorGLB.rotation.x = -Math.PI / 2; // Ruota di -90 gradi sull'asse X per renderlo orizzontale
 
         // Assicurati che tutte le mesh all'interno del modello del pavimento ricevano ombre
@@ -156,7 +155,7 @@ async function loadGLBAsFloor(floorModelPath) {
                 }
             }
         });
-	
+    
         scene.add(floorGLB);
         console.log('Modello GLB usato come pavimento caricato con successo:', floorModelPath);
 
@@ -219,9 +218,10 @@ async function loadGLBModel(modelPath, scaleFactor = 1.0) {
 // --- 4. Funzione per il Ridimensionamento della Finestra ---
 function onWindowResize() {
     const canvas = document.getElementById('giostraCanvas');
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    // Utilizza offsetWidth e offsetHeight per ottenere le dimensioni renderizzate dal CSS
+    camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
 }
 
 
@@ -236,6 +236,5 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-
-// --- 6. Avvio dell'Applicazione ---
-init();
+// Chiamata a init() solo dopo che il DOM √® completamente caricato
+window.onload = init;
