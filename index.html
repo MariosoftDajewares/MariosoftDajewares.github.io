@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erpan Tera Naca Pito</title>
+    <title>Erpan Tera by Mariosoft</title>
     <!-- Carica il font Inter da Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
+    
+<style>
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
@@ -15,7 +16,7 @@
             color: #f0f0f0;
             display: flex;
             flex-direction: column; /* Colonna per allineare gli elementi verticalmente */
-            justify-content: flex-start; /* Allinea gli elementi in alto */
+            justify-content: center; /* MODIFICATO: Centra gli elementi verticalmente */
             align-items: center;
             min-height: 100vh;
             padding: 20px;
@@ -152,37 +153,62 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            /* MODIFICATO: Per layout a due colonne su schermi più grandi */
+            display: flex; /* Mantiene flex per la colonna singola su mobile */
+            flex-direction: column; /* Mantiene colonna singola su mobile */
+            gap: 15px; /* Spazio tra gli elementi */
         }
         li {
-            margin-bottom: 15px;
+            margin-bottom: 0; /* Rimosso margine inferiore per li, gestito da gap */
         }
         a {
+            /* NUOVO STILE PER I LINK */
             display: inline-block;
-            background-color: #555; /* Grigio scuro per i pulsanti */
+            background: linear-gradient(135deg, #007bff, #6f42c4); /* Gradiente blu-violetto */
             color: white;
-            padding: 12px 25px;
+            padding: 10px 20px; /* MODIFICATO: Padding ridotto */
+            border: none; /* Rimuovi il bordo predefinito */
             border-radius: 8px;
             text-decoration: none;
-            font-size: 1.2em;
-            font-weight: bold; /* Font più spesso */
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, letter-spacing 0.3s ease; /* Transizione più fluida per tutti gli effetti */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0; /* Valore iniziale */
+            font-size: 1.1em; /* MODIFICATO: Font size ridotto */
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Ombra più pronunciata */
+            transition: all 0.3s ease; /* Transizione fluida per tutti gli effetti */
+            letter-spacing: 1px; /* Spaziatura tra le lettere */
+            text-transform: uppercase; /* Testo in maiuscolo */
+            position: relative;
+            overflow: hidden; /* Nasconde l'effetto hover che esce dal bordo */
+        }
+        a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1); /* Overlay bianco semi-trasparente */
+            transform: translateX(-100%); /* Inizialmente fuori dallo schermo a sinistra */
+            transition: transform 0.4s ease-out; /* Animazione dello scorrimento */
         }
         a:hover {
-            background-color: #777; /* Grigio più chiaro all'hover */
-            transform: translateY(-3px) scale(1.02); /* Sollevamento più accentuato e leggero ingrandimento */
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7), 0 0 25px rgba(138, 43, 226, 0.5); /* Bagliore blu-violetto */
-            letter-spacing: 0.05em; /* Aumento dello spazio tra le lettere */
+            background: linear-gradient(135deg, #6f42c4, #007bff); /* Inverti il gradiente all'hover */
+            transform: translateY(-3px); /* Leggero sollevamento */
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7), 0 0 30px rgba(138, 43, 226, 0.5); /* Bagliore più intenso */
+            letter-spacing: 2px; /* Aumento dello spazio tra le lettere */
+        }
+        a:hover::before {
+            transform: translateX(0); /* Fai scorrere l'overlay all'interno del pulsante */
         }
         a:active {
             background-color: #444; /* Grigio ancora più scuro al click */
             transform: translateY(0);
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+            letter-spacing: 1px; /* Torna alla spaziatura normale */
         }
         p {
             margin-top: 30px;
-            font-size: 0.9em;
+            font-size: 1.1em; /* MODIFICATO: Font size ingrandito per i paragrafi */
             color: #aaa;
             text-shadow: -2px -2px 4px rgba(0, 0, 0, 0.5); /* Ombra proiettata verso top-right */
         }
@@ -208,11 +234,11 @@
 
         .marquee-text {
             display: inline-block;
-            font-size: 1.6em; /* Font più grande */
+            font-size: 1.4em; /* Font più grande */
             font-weight: bold;
             padding-left: 100%; /* Fa iniziare il testo fuori dallo schermo a destra */
-            animation: marquee 90s linear infinite, colorChangeText 10s linear infinite; /* Animazione di scorrimento più lenta e cambio colore più lento */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            animation: marquee 450s linear infinite, colorChangeText 10s linear infinite; /* MODIFICATO: Animazione di scorrimento MOLTO più lenta (da 90s a 180s) */
+            text-shadow: 3px 3px 2px rgba(0,0,0,1);
         }
 
         /* Keyframes per l'animazione di scorrimento del testo */
@@ -223,41 +249,51 @@
 
         /* Keyframes per l'animazione di cambio colore del testo */
         @keyframes colorChangeText {
-            0% { color: #FF0000; } /* Rosso */
-            14% { color: #FFA500; } /* Arancione */
-            28% { color: #FFFF00; } /* Giallo */
-            42% { color: #00FF00; } /* Verde */
-            56% { color: #00FFFF; } /* Ciano */
-            70% { color: #0000FF; } /* Blu */
-            84% { color: #8A2BE2; } /* Blu violetto */
-            100% { color: #FF0000; } /* Torna al Rosso */
+            0% { color: #0000FF; }   /* Blu */
+            25% { color: #4B0082; }  /* Indaco */
+            50% { color: #8A2BE2; }  /* Violetto */
+            75% { color: #FF00FF; }  /* Magenta */
+            100% { color: #0000FF; } /* Torna al Blu */
         }
-    </style>
+
+        /* Media Queries per la responsività */
+        @media (min-width: 600px) { /* Applica layout a due colonne da 600px in su */
+            ul {
+                grid-template-columns: 1fr 1fr; /* Due colonne uguali */
+                display: grid; /* Passa a grid layout */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                background-position: right center; /* MODIFICATO: Sposta l'immagine di sfondo a destra su mobile */
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .container {
+                padding: 20px;
+            }
+            /* Non c'è un canvas in questa pagina, quindi ho rimosso la regola .canvas-wrapper */
+        }
+</style>
+    
 </head>
 <body>
     <div id="starfield"></div> <!-- Contenitore per l'animazione delle stelle -->
 
     <div class="marquee-container">
-        <p class="marquee-text">BENVENUTI SU ERPANTERA.GITHUB.IO - QUESTO SITO SI OSTINA AD EVOLVERSI. NON RIFATELO A CASA. ALLE PRIMME 50 TELEFONATE IN OMAGGIO UN MODELLO 3D DI UNA SFERA.PER L'ANIMAZIONE C'E' UN SOVRAPPREZZO. GRAFICHE FRESCHE DI GIORNATA ANCHE FUORI STAGIONE. L' A.I. NON VUOLE MA QUI ANCORA FACCIAMO LA ROBA A MANO, MI RACCOMANDO NESSUNO GLIELO VADA A DIRE. ESPLORATE PURE, FATE COME FOSTE A CASA VOSTRA. COME SE IO VENGO A CASA TUA E MI METTO AD APRIRE TUTTE LE PORTE, BEL TIPO QUESTO QUA. SE LE STELLE VI DANNO FASTIDIO SPOSTATELE CON LA MANO TANTO NON VI FANNO NIENTE. </p>
+        <p class="marquee-text">BENVENUTI SU ERPANTERA.GITHUB.IO - QUESTO SITO SI OSTINA AD EVOLVERSI. NON RIFATELO A CASA. ALLE PRIME 50 TELEFONATE IN OMAGGIO UN MODELLO 3D DI UNA SFERA.PER L'ANIMAZIONE C'E' UN SOVRAPPREZZO. GRAFICHE FRESCHE DI GIORNATA ANCHE FUORI STAGIONE. L' A.I. NON VUOLE MA QUI ANCORA FACCIAMO LA ROBA A MANO, MI RACCOMANDO NESSUNO GLIELO VADA A DIRE. ESPLORATE PURE, FATE COME FOSTE A CASA VOSTRA. COME SE IO VENGO A CASA TUA E MI METTO AD APRIRE TUTTE LE PORTE, BEL TIPO QUESTO QUA. SE LE STELLE VI DANNO FASTIDIO SPOSTATELE CON LA MANO TANTO NON VI FANNO NIENTE. RICORDATE DI LASCIARE UNA MONETINA NELLA PAGINA -RECUPERO CREDITS- PER FARCI PAGARE I BUFFI CHE QUI SONO STATE SPESE ORE PER LA GLORIA E IL DIVERTIMENTO MA CON QUELLI NON SE MAGNA. QUELLO CHE GIRA SU PC RIMANE SU PC E NON GIRA SU MOBILE VISTO CHE ANCHE GLI ANDROID HANNO ORECCHIE PURE SE SUL CELLULARE NON SI VEDONO. QUI SI VENDONO FAVE FRESCHE MA SONO IN 3D QUINDI DITE A TUTTI I FAVICI CHE SE VOGLIONO VEDERE FAVE FRESCHE DA VICINO QUI HANNO L' UNICA OCCASIONE DELLA LORO VITA, E NON E' POCO. TUTTO IL RESTO E' GOYA IN SOFFRITTO DI CARAVAGGIO E TINTORETTO QB. TORNATE OGNI TANTO PER VEDERE QUANTO TEMPO LIBERO VI E' STATO SPESO INVECE DI ANDARE AL MARE O A SCIARE PER RIPRENDERCI DAL LAVORO REAL LIFE MOLTO STRESSANTE E POCO PAGATO CHE CI LEVA IL GROSSO DELLE ENERGIE. E LASCIATELI CINQUE EURI SU PAYPAL CHE TANTO OGGI NON CI ANDATE MANCO PIU' DAL KEBBABBARO CO STI SPICCI, A NOI INVECE FANNO COMODO E VI FAREMO TROVARE SEMPRE PIU' ATTIVITA' DIVERTENTI TUTTE IN 3D CHE IN ITALIA STA COSA LA SAPPIAMO FARE IN CINQUE SEI E SIAMO TUTTI QUI A SCRIVERVI SU QUESTA STRISCIA CHE POTREBBE SEMBRARE ANIMATA DA NOI MA IN REALTA' ABBIAMO UN PROBLEMA AL COMPUTER CHE LE SCRITTE NON STANNO FERME. NOI NON AVREMMO NEANCHE SAPUTO COME FARE AD ANIMARE UNA SCRITTA PERCHE' TRATTIAMO SOLO 3D E FELINI DI GROSSA TAGLIA. SE ERA UNA TIGRE A CORRERE LA ACCHIAPPAVAM COME NIENTE MA CON LE SCRITTE NON SAPREMMO DA DOVE PARTIRE. MENOMALE CHE CON GEMINI SEMBRA CHE UNO SA FARE LE COSE. ORA BASTA STARE A LEGGERE STA SCRITTA CHE C'E' TUTTO UN PORTALE DA ESPLORARE QUI DABBASSO. POI SE VI PIACE E PASSATE UN BEL QUARTO D'ORA DIVERTENDOVI MOLLATE QUALCHE SPICCIO NELLA PAGINA -RECUPERO CREDITS- COSI' STASERA UN ETTO DE PROSCIUTTO LO RIUSCIAMO A COMPRARE. MENTRE L'INTELLIGENZA DIVENTA ARTIFICIALE LA NOSTRA STUPIDITA' PERMANE INSITA NELLA NATURA UMANA NONOSTANTE L' A.I. TALVOLTA CACCI DELLE SCIEMPIAGGINI CHE NEANCHE NOSTRO ZIO VINCENZO CHE E' NOTORIAMENTE UN BABBEO DI PROPORZIONI CONTINENTALI SAREBBE RIUSCITO A PARTORIRLE NEMMENO DOPO IL QUINTO VECCHIA ROMAGNA. LASCIATE CINQUE EURI VOI CH' ENTRATE. NO FEEDBACK NO FLASHBACK NO NICKELBACK NO ZAPOTEC NO 2.5D NO GREEN PASS: SOLO 3D. GRAZIE DELL' ATTENZIONE LA MESSA E' FINITA BUON TOUR NON GUIDATO NELLA TANA DI ERPAN. PAROLA D' ORDINE PER ENTRATE FATEBENESORELLECHEDIFRATELLINEHOTROPPI. LARGO AI GIOVANI LUNGO AI VECCHI DECAFFEINATO AI BAMBINI. ERPAN TERA UBER ALLES DANKE SCHOEN BELLA BRO. NAVIGA LEVIGA DONDOLA ROTOLA SEMINA SFRIGOLA E MANGIALA. DOPO DIVERSE NOTTI INSONNI ABBIAMO SCOPERTO CHE LE 3D DI 3D STANNO PER DANNAZIONE DEVO DORMIRE. ENJOY SE VUOI MOGLI E BUOI DEI PAESI NOSTRI CHE SONO TUTTI IN 3D. ESPLORA, COMBATTI, GRATTATI E SMADONNA CON IL NUOVO METASITO DELLA MARIOSOFT, DA OGGI CON MONOLOGHI INSENSATI IN OMAGGIO. UN GIAVASCRITTO PER DOMARLI TUTTI, UNO PER CRASHARE E NEL FRATTEMPO SGUAZZARE IN TRE DIMENSIONI DAL BROWSER. NAVIGARE NON E' MAI STATO COSI' TRIDIMENSIONALE, GENTE CHE VOMITA DALLE VERTIGINI, GENTE COMMOSSA E GENTE CHE PROVA A TUFFARSI SUI MONITOR SCAMBIANDOLI PER WORMHOLES. MILLE PUNTI DI SUTURA DA QUANDO SIAMO ONLINE. MA QUALCUNO DOVEVA PUR FARLO, O SU INTERNET RESTANO SOLO I PORNAZZI E I SITI DI ODIO. E NOI INVECE FACCIAMO IL 3D. TIE'. BEHOLD THE MIGHTY ERPAN TERA! (Mariosoft Crew)</p>
     </div>
 
     <div class="container">
-        <h1>Erpan Tera</h1>
-        <p>Choose your ragady</p>
+        <h1>ERPAN TERA</h1>
+        <p>SIC ITVR AD ASTRA </p>
         <ul>
-            <!-- <li><a href="Lab.html">Lab</a></li> -->
-            <!--<li><a href="metapulta.html">Metapulta (rotto)</a></li> -->
-            
             <li><a href="lab_2.html">Arena della muerte</a></li>
-
             <li><a href="lab_3.html">Questo devo finillo</a></li>
-            
             <li><a href="lab_4.html">Questo nu lo trova</a></li>
-            
             <li><a href="credits.html">Recupero credits</a></li>
-            <!-- Aggiungi qui altri link alle tue pagine future -->
-            
-            
         </ul>
         <p>Powered by Mariosoft</p>
     </div>
