@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena della muerte</title>
+    <!-- Carica il font Inter da Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #1a1a1a;
+            font-family: 'Inter', Arial, sans-serif; /* Applica il font a tutto il corpo */
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+        }
+
+        /* Le regole CSS per #instructions e .hidden-instructions non sono più necessarie ma possono rimanere innocue */
+    </style>
+</head>
+<body>
+    <canvas id="gueraCanvas"></canvas>
+    <!-- Il div #instructions è stato rimosso -->
+
+    <!-- Inclusione del tuo script GUERA.js dopo tutti gli elementi HTML -->
+    <script type="module" src="./GUERA.js"></script>
+</body>
+</html>
