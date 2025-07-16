@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sfluideggia</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background-color: #000; 
+        }
+        #webgl-canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        #color-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        #color-overlay h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        /* Stili per il dropdown */
+        #color-select {
+            width: 100%; /* Occupa tutta la larghezza del contenitore */
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+            appearance: none; /* Rimuove lo stile di default del browser */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            outline: none; /* Rimuove il bordo blu al focus */
+        }
+        #color-select:focus {
+            border-color: #0077ff; /* Colore del bordo al focus */
+            box-shadow: 0 0 5px rgba(0, 119, 255, 0.5);
+        }
+        /* Opzionale: Aggiungi una freccia personalizzata per il dropdown */
+        #color-overlay::after {
+            content: '?'; /* Freccia unicode */
+            position: absolute;
+            top: 65px; /* Adatta la posizione alla tua layout */
+            right: 30px;
+            color: white;
+            font-size: 14px;
+            pointer-events: none; /* Permette il click attraverso la freccia */
+        }
+    </style>
+</head>
+<body>
+    <div id="webgl-canvas-container"></div>
+
+    <div id="color-overlay">
+        <h3>Sfluidi</h3>
+        <select id="color-select">
+            <option value="#0077ff">Blu</option>
+            <option value="#ff0077">Rosso</option>
+            <option value="#77ff00">Verde</option>
+            <option value="#ffaa00">Terra di Siena</option>
+            <option value="#ffffff">Bianco</option>
+            <option value="#800080">Viola</option>
+            <option value="#00ffff">Ciano</option>
+        </select>
+    </div>
+
+    <script type="module" src="./lib/three.module.js"></script>
+    
+    <script type="module">
+        import { createInteractiveFluidScene } from './lab_4.js'; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fluidScene = createInteractiveFluidScene('webgl-canvas-container', '#0077ff'); 
+
+            // Seleziona il nuovo elemento dropdown
+            const colorSelect = document.getElementById('color-select');
+            if (colorSelect) {
+                // Aggiungi un event listener per l'evento 'change'
+                colorSelect.addEventListener('change', (event) => {
+                    const newColor = event.target.value; 
+                    fluidScene.setFluidColor(newColor); 
+                });
+
+                // Imposta il colore iniziale del dropdown al caricamento
+                // (Assicurati che l'opzione con value="#0077ff" sia selezionata di default nell'HTML)
+                colorSelect.value = '#0077ff'; 
+            }
+        });
+    </script>
+</body>
+</html>
