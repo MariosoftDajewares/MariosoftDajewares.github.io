@@ -3,180 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
-    <title>Regalo di compleanno per FC</title>
-    <!-- Fonts from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <title>Visualizzatore GLB</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        body {
-            font-family: 'Inter', sans-serif; /* Default font for other elements */
-            background-color: #1a202c; /* Fallback background color */
-            color: #ffffff; /* White text color */
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Prevent unwanted scrolling */
-            position: relative; /* Necessary for positioning child elements with 'absolute' */
-            min-height: 100vh; /* Ensure body takes full viewport height */
-            display: flex; /* Use flexbox for main content alignment */
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Align content to the top */
-        }
+    /* style.css */
 
-        /* Style for the canvas as background */
-        canvas {
-            position: fixed; /* Fix the canvas relative to the viewport */
-            top: 0;
-            left: 0;
-            width: 100vw; /* 100% viewport width */
-            height: 100vh; /* 100% viewport height */
-            display: block; /* Remove extra space below the canvas */
-            background-color: #333; /* Canvas background color, visible if animation doesn't start immediately */
-            /* Remove rounded corners and shadow for a full-screen background */
-            border-radius: 0;
-            box-shadow: none;
-        }
+/* Importa il font Inter da Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-        /* Style for the main title in overlay */
-        h1 {
-            position: absolute; /* Position the title in overlay */
-            top: 80px; /* Distance from top edge */
-            text-align: center;
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Adjust for exact centering */
-            font-family: 'Playfair Display', serif; /* Nuovo font serif più dolce */
+/* Stili base per il corpo della pagina */
+body {
+    font-family: 'Inter', sans-serif; /* Utilizza il font Inter */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Previene lo scrolling indesiderato */
+    background-color: #0d001a; /* Sfondo scuro che evoca lo spazio profondo */
+}
 
-            /* Stile del titolo con gradiente animato blu-violetto */
-            background-image: linear-gradient(to right, #007bff, #6f42c4, #8a2be2, #6f42c4, #007bff); /* Gradiente da blu a violetto e ritorno */
-            background-size: 200% auto; /* Rende il gradiente più largo del testo per l'animazione */
-            -webkit-background-clip: text; /* Applica il gradiente solo al testo (per WebKit) */
-            background-clip: text; /* Applica il gradiente solo al testo */
-            -webkit-text-fill-color: transparent; /* Rende il colore del testo trasparente (per WebKit) */
-            color: transparent; /* Rende il colore del testo trasparente */
-            animation: gradientAnimation 5s linear infinite; /* Animazione del gradiente */
+/* Contenitore del canvas Three.js */
+#threeJsCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0; /* Assicura che il canvas sia dietro i controlli */
+}
 
-            margin-bottom: 20px; /* Spazio sotto il titolo */
-            font-size: 2em; /* Dimensione del font ridotta del 30% (da 2.8em a 1.96em, arrotondato a 2em) */
-            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Ombra più pronunciata per leggibilità */
-            transition: text-shadow 0.3s ease; /* Transizione per l'ombra del testo */
-            z-index: 10; /* Ensure the title is above the canvas */
-            margin-top: 0; /* Remove default margin */
-        }
+/* Stile per il contenitore dei controlli (generato dinamicamente) */
+/* Questo selettore si basa sulle classi Tailwind applicate al div dei controlli */
+.absolute.bottom-4.left-1\/2 {
+    /* Override dei colori e aggiunta di gradienti e ombre */
+    background: linear-gradient(90deg, rgba(26, 0, 51, 0.9), rgba(13, 0, 26, 0.9)); /* Gradiente scuro blu-violaceo */
+    border: 1px solid rgba(74, 144, 226, 0.6); /* Bordo sottile bluastro */
+    box-shadow:
+        0 0 30px rgba(74, 144, 226, 0.7), /* Bagliore blu intenso */
+        0 0 15px rgba(224, 59, 138, 0.5); /* Bagliore magenta secondario */
+    border-radius: 15px; /* Angoli più arrotondati per un look futuristico (RIDOTTO) */
+    padding: 1.5rem; /* Più spazio interno (RIDOTTO) */
+    backdrop-filter: blur(8px); /* Effetto vetro smerigliato */
+    -webkit-backdrop-filter: blur(8px); /* Per Safari */
+    /* Assicurati che le proprietà di posizionamento Tailwind siano mantenute */
+    position: absolute;
+    bottom: 1.2rem; /* Leggermente più in alto dal bordo inferiore (RIDOTTO) */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column; /* Default per mobile */
+    gap: 0.8rem; /* Spazio tra gli elementi (RIDOTTO) */
+}
 
-        h1:hover {
-            text-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 25px rgba(0, 123, 255, 0.6); /* Ombra luminosa al passaggio del mouse */
-        }
+/* Media query per schermi più grandi (desktop) */
+@media (min-width: 768px) {
+    .absolute.bottom-4.left-1\/2 {
+        flex-direction: row; /* Layout orizzontale per desktop */
+        gap: 1.2rem; /* Più spazio per desktop (RIDOTTO) */
+    }
+}
 
-        /* Keyframes per l'animazione del gradiente del titolo */
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
+/* Stili comuni per input file, select e button all'interno del contenitore */
+.absolute.bottom-4.left-1\/2 input[type="file"],
+.absolute.bottom-4.left-1\/2 select,
+.absolute.bottom-4.left-1\/2 button {
+    font-size: 0.9rem; /* Dimensione del font ridotta */
+    padding: 0.7rem 1.2rem; /* Padding ridotto */
+    border: none;
+    border-radius: 10px; /* Angoli arrotondati (RIDOTTO) */
+    color: #f0f0f0; /* Colore testo chiaro */
+    cursor: pointer;
+    transition: all 0.4s ease-in-out; /* Transizioni più fluide */
+    font-weight: 600; /* Testo leggermente meno audace, ma comunque leggibile */
+    letter-spacing: 0.05em; /* Spaziatura tra le lettere (RIDOTTO) */
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.3); /* Bagliore sottile al testo (RIDOTTO) */
+    position: relative; /* Per effetti pseudo-elemento */
+    overflow: hidden; /* Per mascherare effetti overflow */
+}
 
-        /* Stili per i pulsanti basati sulle tue indicazioni */
-        .control-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #007bff, #6f42c4); /* Gradiente blu-violetto */
-            color: white;
-            padding: 10px 20px; /* Padding ridotto */
-            border: none; /* Rimuovi il bordo predefinito */
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 1.1em; /* Font size ridotto */
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Ombra più pronunciata */
-            transition: all 0.3s ease; /* Transizione fluida per tutti gli effetti */
-            letter-spacing: 1px; /* Spaziatura tra le lettere */
-            text-transform: uppercase; /* Testo in maiuscolo */
-            position: relative; /* Necessario per l'effetto ::before */
-            overflow: hidden; /* Nasconde l'effetto hover che esce dal bordo */
-            z-index: 10; /* Ensure buttons are above the canvas */
-        }
+/* Stile specifico per l'input file */
+.absolute.bottom-4.left-1\/2 input[type="file"] {
+    /* Nasconde l'input file nativo e usa un pseudo-elemento per lo stile */
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent; /* Rende trasparente l'input reale */
+    color: transparent; /* Nasconde il testo dell'input reale */
+}
 
-        .control-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1); /* Overlay bianco semi-trasparente */
-            transform: translateX(-100%); /* Inizialmente fuori dallo schermo a sinistra */
-            transition: transform 0.4s ease-out; /* Animazione dello scorrimento */
-        }
+.absolute.bottom-4.left-1\/2 input[type="file"]::before {
+    content: 'Carica Modello GLB'; /* Testo visibile */
+    display: inline-block;
+    background: linear-gradient(45deg, #4a90e2, #6a5acd); /* Gradiente blu-viola */
+    color: white;
+    padding: 0.7rem 1.2rem; /* Padding ridotto */
+    border-radius: 10px; /* Angoli arrotondati (RIDOTTO) */
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4); /* Ombra blu (RIDOTTO) */
+}
 
-        .control-button:hover {
-            background: linear-gradient(135deg, #6f42c4, #007bff); /* Inverti il gradiente all'hover */
-            transform: translateY(-3px); /* Leggero sollevamento */
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7), 0 0 30px rgba(138, 43, 226, 0.5); /* Bagliore più intenso */
-            letter-spacing: 2px; /* Aumento dello spazio tra le lettere */
-        }
+.absolute.bottom-4.left-1\/2 input[type="file"]:hover::before {
+    background: linear-gradient(45deg, #6a5acd, #4a90e2); /* Inverti gradiente al hover */
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.7), 0 0 25px rgba(224, 59, 138, 0.2); /* Ombra più intensa con bagliore magenta (RIDOTTO) */
+    transform: translateY(-2px); /* Leggero sollevamento (RIDOTTO) */
+}
 
-        .control-button:hover::before {
-            transform: translateX(0); /* Fai scorrere l'overlay all'interno del pulsante */
-        }
+/* Stile per i selettori (dropdown) */
+.absolute.bottom-4.left-1\/2 select {
+    background-color: #150030; /* Viola molto scuro per lo sfondo del selettore */
+    color: #f0f0f0; /* Testo bianco */
+    box-shadow: 0 4px 15px rgba(224, 59, 138, 0.4); /* Ombra magenta (RIDOTTO) */
+    /* Freccia personalizzata per il select */
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23f0f0f0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center; /* Posizione freccia (RIDOTTO) */
+    background-size: 1.2em; /* Dimensione freccia (RIDOTTO) */
+    padding-right: 2.5rem; /* Spazio per la freccia (RIDOTTO) */
+}
 
-        .control-button:active {
-            background: linear-gradient(135deg, #007bff, #6f42c4); /* Torna al gradiente originale al click */
-            transform: translateY(0);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-            letter-spacing: 1px; /* Torna alla spaziatura normale */
-        }
+.absolute.bottom-4.left-1\/2 select:hover {
+    background: linear-gradient(45deg, #8a2be2, #e03b8a); /* Inverti gradiente al hover */
+    box-shadow: 0 6px 20px rgba(224, 59, 138, 0.7), 0 0 25px rgba(74, 144, 226, 0.2); /* Ombra più intensa con bagliore blu (RIDOTTO) */
+    transform: translateY(-2px); /* Leggero sollevamento (RIDOTTO) */
+}
 
-        /* Nuovi stili per posizionare i pulsanti agli angoli */
-        .top-left-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
+/* Stile per il pulsante "Svuota Scena" */
+.absolute.bottom-4.left-1\/2 button {
+    background: linear-gradient(45deg, #e03b8a, #4a90e2); /* Gradiente magenta-blu */
+    box-shadow: 0 4px 15px rgba(224, 59, 138, 0.4); /* Ombra magenta (RIDOTTO) */
+}
 
-        .top-right-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
+.absolute.bottom-4.left-1\/2 button:hover {
+    background: linear-gradient(45deg, #4a90e2, #e03b8a); /* Inverti gradiente al hover */
+    transform: translateY(-2px); /* Leggero sollevamento (RIDOTTO) */
+    box-shadow: 0 6px 20px rgba(224, 59, 138, 0.7), 0 0 25px rgba(74, 144, 226, 0.7); /* Ombra più intensa con bagliore blu (RIDOTTO) */
+}
+
+/* Effetto grafico complesso: "Artigli di Pantera" (sottile e astratto) */
+/* Questo crea una serie di linee brillanti che simulano artigli o energia */
+.absolute.bottom-4.left-1\/2::before,
+.absolute.bottom-4.left-1\/2::after {
+    content: '';
+    position: absolute;
+    height: 2px; /* Altezza ridotta */
+    background: linear-gradient(90deg, transparent, rgba(224, 59, 138, 0.6), rgba(74, 144, 226, 0.6), transparent); /* Intensità bagliore ridotta */
+    filter: blur(2px); /* Effetto bagliore ridotto */
+    z-index: -1;
+    border-radius: 50%;
+    animation: pulseLine 4s infinite alternate ease-in-out;
+}
+
+.absolute.bottom-4.left-1\/2::before {
+    top: -10px; /* Posizione ridotta */
+    left: 10%;
+    width: 80%;
+    transform: rotate(-2deg);
+}
+
+.absolute.bottom-4.left-1\/2::after {
+    bottom: -10px; /* Posizione ridotta */
+    right: 10%;
+    width: 80%;
+    transform: rotate(2deg);
+    animation-delay: 1.5s; /* Sfasamento per un effetto dinamico */
+}
+
+@keyframes pulseLine {
+    0% { transform: scaleX(0.7) rotate(var(--rotate-deg, 0deg)); opacity: 0.5; }
+    50% { transform: scaleX(1) rotate(var(--rotate-deg, 0deg)); opacity: 1; }
+    100% { transform: scaleX(0.7) rotate(var(--rotate-deg, 0deg)); opacity: 0.5; }
+}
+
+/* Shimmer effect on hover for all interactive elements */
+.absolute.bottom-4.left-1\/2 input[type="file"]::before::after,
+.absolute.bottom-4.left-1\/2 select::after,
+.absolute.bottom-4.left-1\/2 button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%; /* Inizia fuori dello schermo a sinistra */
+    width: 50%; /* Larghezza del "flash" */
+    height: 100%;
+    background: rgba(255, 255, 255, 0.15); /* Colore del flash (leggermente meno intenso) */
+    transform: skewX(-30deg); /* Angolo del flash */
+    transition: all 0.6s ease;
+    z-index: 1; /* Sopra il contenuto, sotto il testo */
+}
+
+.absolute.bottom-4.left-1\/2 input[type="file"]:hover::before::after,
+.absolute.bottom-4.left-1\/2 select:hover::after,
+.absolute.bottom-4.left-1\/2 button:hover::after {
+    left: 150%; /* Si sposta a destra al hover */
+}
+
+
+/* Stile per il messaggio box personalizzato (invece di alert) */
+.message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #1a0033, #0d001a); /* Sfondo scuro come il contenitore principale */
+    border: 2px solid #e03b8a; /* Bordo magenta */
+    border-radius: 12px; /* Angoli ridotti */
+    padding: 1.5rem; /* Padding ridotto */
+    box-shadow: 0 0 30px rgba(224, 59, 138, 0.7), 0 0 15px rgba(74, 144, 226, 0.4); /* Bagliore magenta e blu (RIDOTTO) */
+    z-index: 1000; /* Assicura che sia sopra tutto */
+    text-align: center;
+    color: #f0f0f0; /* Testo chiaro */
+    max-width: 90%;
+    width: 400px; /* Larghezza leggermente ridotta */
+    backdrop-filter: blur(8px); /* Effetto vetro smerigliato */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.message-box-content p {
+    color: #f0f0f0;
+    margin-bottom: 1rem; /* Margine ridotto */
+    font-size: 1rem; /* Font size ridotto */
+}
+
+.message-box-content .text-red-600 {
+    color: #e03b8a; /* Usa il magenta per i messaggi di errore */
+    font-weight: bold;
+    font-size: 1.1rem; /* Font size leggermente ridotto */
+}
+
+.message-box-content button {
+    background: linear-gradient(45deg, #4a90e2, #e03b8a); /* Gradiente blu-magenta per il pulsante */
+    color: white;
+    padding: 0.7rem 1.5rem; /* Padding ridotto */
+    border: none;
+    border-radius: 8px; /* Angoli ridotti */
+    cursor: pointer;
+    font-size: 1rem; /* Font size ridotto */
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(74, 144, 226, 0.3); /* Ombra ridotta */
+}
+
+.message-box-content button:hover {
+    transform: translateY(-1px); /* Sollevamento ridotto */
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.5), 0 0 20px rgba(224, 59, 138, 0.5); /* Ombra e bagliore ridotti */
+}
+
     </style>
 </head>
 <body>
+    <!-- Il canvas di Three.js verrà inserito qui dal JavaScript -->
+    <div id="threeJsCanvas"></div> 
 
-    <!-- Main title in overlay -->
-    <h1>BUON COMPLEANNO!</h1>
-
-    <!-- Pulsante "Scarica Modello" in alto a sinistra -->
-    <button id="downloadModelButton" class="control-button top-left-button">
-        Scarica Modello
-    </button>
-
-    <!-- Pulsante "Bigliettino" in alto a destra -->
-    <!-- MODIFICA QUI: Da <button> a <a> e aggiunto href="bigl.html" -->
-    <a href="bigl.html" id="bigliettinoButton" class="control-button top-right-button">
-        Bigliettino
-    </a>
-
-    <!-- The canvas, now serving as background -->
-    <canvas id="giostraCanvas"></canvas>
-
-    <!-- Your Three.js script -->
-    <script type="module" src="./lab.js"></script>
-
-    <script>
-        // Funzione per scaricare il file del modello
-        document.getElementById('downloadModelButton').addEventListener('click', function() {
-            const fileUrl = './models/FC.glb'; // Percorso corretto del file
-            const fileName = 'FC.glb';
-
-            // Crea un elemento link temporaneo
-            const link = document.createElement('a');
-            link.href = fileUrl;
-            link.download = fileName; // Specifica il nome del file da scaricare
-
-            // Aggiungi il link al DOM, cliccalo, e poi rimuovilo
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    </script>
+    <!-- Script delle librerie Three.js -->
+    <script type="module" src="./lib/three.module.js"></script>
+    <script type="module" src="./lib/OrbitControls.js"></script>
+    <script type="module" src="./lib/GLTFLoader.js"></script>
+    
+    <!-- Il tuo script principale -->
+    <script type="module" src="GLB_loader.js"></script>
 </body>
 </html>
